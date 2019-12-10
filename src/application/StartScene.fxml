@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  added fxml by JEE  -->
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.StartSceneController">
+   <children>
+      <Button fx:id="startButton" layoutX="111.0" layoutY="198.0" mnemonicParsing="false" onAction="#start" text="START">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <TextField fx:id="txtName" layoutX="39.0" layoutY="58.0" promptText="Name">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <Label fx:id="lblNotice" alignment="CENTER" layoutY="20.0" prefHeight="19.0" prefWidth="300.0" text="Please enter your name." textFill="#d31c1c">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="helpButton" layoutX="80.0" layoutY="243.0" mnemonicParsing="false" onAction="#help" text="HOW TO PLAY">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+   
+      <fx:define>
+          <ToggleGroup fx:id="difficulty"/>
+      </fx:define>
+      <RadioButton fx:id="easy" layoutX="105.0" layoutY="108.0" mnemonicParsing="false" text="Easy" toggleGroup="$difficulty"/>
+      <RadioButton fx:id="normal" layoutX="105.0" layoutY="136.0" mnemonicParsing="false" text="Normal" toggleGroup="$difficulty"/>
+      <RadioButton fx:id="hard" layoutX="105.0" layoutY="164.0" mnemonicParsing="false" text="Hard" toggleGroup="$difficulty"/>
+ 	 
+   </children>  
+</AnchorPane>

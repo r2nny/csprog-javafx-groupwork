@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox onKeyPressed="#keyAction" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MapGameController">
+  <padding>
+    <Insets bottom="10" left="10" right="10" top="10" />
+  </padding>
+  
+  <children>
+    <HBox alignment="TOP_CENTER" prefHeight="25.0">
+      <children>
+	<Button onAction="#func1ButtonAction" prefWidth="100" text="FUNC1" />
+	<Button onAction="#func2ButtonAction" prefWidth="100" text="FUNC2" />
+	<Button onAction="#func3ButtonAction" prefWidth="100" text="FUNC3" />
+	<Button onAction="#func4ButtonAction" prefWidth="100" text="FUNC4" />
+      </children>
+    </HBox>
+      <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+      	<GridPane alignment="center" hgap="10" maxHeight="105.0" maxWidth="110.0" vgap="10">
+      	  <Button onAction="#upButtonAction" text="↑" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+      	  <Button onAction="#leftButtonAction" text="←" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+      	  <Button onAction="#rightButtonAction" text="→" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      	  <Button onAction="#downButtonAction" text="↓" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+               <columnConstraints>
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+      	</GridPane>
+            <Label fx:id="name" alignment="CENTER" text="Name : NONE">
+               <HBox.margin>
+                  <Insets left="50.0" top="20.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets bottom="15.0" top="15.0" />
+         </VBox.margin>
+      </HBox>
+    <GridPane fx:id="mapGrid" prefHeight="360" prefWidth="360">
+    </GridPane>
+
+  </children>
+</VBox>
