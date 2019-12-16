@@ -6,11 +6,11 @@ import javafx.scene.image.ImageView;
 public class MapData {
     public static final int TYPE_NONE   = 0;
     public static final int TYPE_WALL   = 1;
-    public static final int TYPE_OTHERS = 2;
+    public static final int TYPE_ITEM = 2;
     private static final String mapImageFiles[] = {
         "file:src/application/png/SPACE.png",
         "file:src/application/png/WALL.png",
-        "file:src/application/png/SPACE.png"  // not used
+        "file:src/application/png/ITEM.png" 
     };
 
     private Image[] mapImages;
@@ -20,9 +20,9 @@ public class MapData {
     private int height;
 
     MapData(int x, int y){
-        mapImages     = new Image[2];
+        mapImages     = new Image[3];
         mapImageViews = new ImageView[y][x];
-        for (int i=0; i<2; i++) {
+        for (int i=0; i<3; i++) {
             mapImages[i] = new Image(mapImageFiles[i]);
         }
 
@@ -32,7 +32,9 @@ public class MapData {
 
         fillMap(MapData.TYPE_WALL);
         digMap(1, 3);
+        settingItem();
         setImageViews();
+        printMap();
     }
 
     public int getHeight(){
@@ -96,6 +98,20 @@ public class MapData {
                 setMap(x+dx, y+dy, MapData.TYPE_NONE);
                 digMap(x+dx*2, y+dy*2);
 
+            }
+        }
+    }
+    
+    /* 松本 */
+    public void settingItem(){
+        int x,y;
+        int i=0;
+        while(i<3){
+            x = (int)(Math.random() * (width -2) + 1);
+            y = (int)(Math.random() * (height-2) + 1);
+            if (getMap(x,y) == MapData.TYPE_NONE){
+                setMap(x,y,MapData.TYPE_ITEM);
+                i++;
             }
         }
     }

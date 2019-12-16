@@ -23,7 +23,10 @@ public class MapGameController implements Initializable {
     public ImageView[] mapImageViews;
 //  public Group[] mapGroups;
     
-    /* added variables by JEE */
+    /* 松本 */
+    public int item = 0;
+    
+    /* added variables by JEE */ 
     AudioClip startBgm = new AudioClip(new File("./src/application/bgm/town_bgm.mp3").toURI().toString());
 
     @Override
@@ -31,7 +34,9 @@ public class MapGameController implements Initializable {
 
     	/* added method by JEE */
     	changeBgm("start");
-    	name.setText("NAME : " + GameData.name + "\n" + "DIFFICULTY : " + GameData.difficulty);
+        name.setText("NAME : " + GameData.name + "\n" + 
+        			 "DIFFICULTY : " + GameData.difficulty + "\n" + 
+        			 "ITEM : " + item);	
     	
         mapData = new MapData(21,15);
         chara = new MoveChara(1,1,mapData);
@@ -104,8 +109,13 @@ public class MapGameController implements Initializable {
         outputAction("DOWN");
         chara.setCharaDir(MoveChara.TYPE_DOWN);
         chara.move(0, 1);
+        
+        /* 松本 */
+        judge();
+        
         mapPrint(chara, mapData);
     }
+    
     public void downButtonAction(ActionEvent event) {
         downButtonAction();
     }
@@ -114,6 +124,10 @@ public class MapGameController implements Initializable {
         outputAction("RIGHT");
         chara.setCharaDir(MoveChara.TYPE_RIGHT);
         chara.move( 1, 0);
+        
+        /* 松本 */
+        judge();
+        
         mapPrint(chara, mapData);
     }
     public void rightButtonAction(ActionEvent event) {
@@ -125,6 +139,10 @@ public class MapGameController implements Initializable {
         outputAction("LEFT");
         chara.setCharaDir(MoveChara.TYPE_LEFT);
         chara.move(-1, 0);
+        
+        /* 松本 */
+        judge();
+        
         mapPrint(chara, mapData);
     }
     
@@ -136,9 +154,30 @@ public class MapGameController implements Initializable {
         outputAction("UP");
         chara.setCharaDir(MoveChara.TYPE_UP);
         chara.move(0, -1);
+        
+        /* 松本 */
+        judge();
+        
         mapPrint(chara, mapData);
     }
+    
     public void upButtonAction(ActionEvent event) {
         upButtonAction();
+    }
+    
+    /* 松本 */
+    public void judge() {
+        if (mapData.getMap(chara.getPosX(), chara.getPosY()) == MapData.TYPE_ITEM){
+            item += 1;
+            
+            /* JEE */
+            name.setText("NAME : " + GameData.name + "\n" + 
+            			 "DIFFICULTY : " + GameData.difficulty + "\n" + 
+            			 "ITEM : " + item);
+            
+            mapData.setMap(chara.getPosX(), chara.getPosY(), MapData.TYPE_NONE);
+            mapData.setImageViews();
+            mapImageViews[chara.getPosY() * mapData.getWidth() + chara.getPosX()] = mapData.getImageView(chara.getPosX(), chara.getPosY());
+        }
     }
 }

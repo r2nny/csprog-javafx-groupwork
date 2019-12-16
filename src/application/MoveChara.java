@@ -2,6 +2,7 @@ package application;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Rectangle;
 import javafx.animation.AnimationTimer;
 
 public class MoveChara {
@@ -85,7 +86,12 @@ public class MoveChara {
             return false;
         } else if (mapData.getMap(posX+dx, posY+dy) == MapData.TYPE_NONE){
             return true;
+        
+        /* 松本 */
+        } else if (mapData.getMap(posX+dx, posY+dy) == MapData.TYPE_ITEM){
+            return true;
         }
+        
         return false;
     }
 
@@ -94,7 +100,7 @@ public class MoveChara {
             posX += dx;
             posY += dy;
             return true;
-        }else {
+        } else {
             return false;
         }
     }
