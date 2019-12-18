@@ -1,3 +1,4 @@
+/* Hello */
 /*  edited class by JEE  */
 package application;
 
