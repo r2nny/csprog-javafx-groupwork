@@ -1,5 +1,5 @@
-/* Hello */
-/*  edited class by JEE  */
+/*TEST*/
+
 package application;
 
 import javafx.application.Application;
