@@ -154,6 +154,8 @@ public class MapData {
                      System.out.print("CN");
                  } else if(getMap(x,y) == MapData.TYPE_GOAL) {
                      System.out.print("GL");
+                 } else if(getMap(x,y) == MapData.TYPE_ENEMY_SLIME) {
+                     System.out.print("EN");
                  } else {
                      System.out.print("  ");
                 }
