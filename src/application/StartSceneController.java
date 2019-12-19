@@ -44,13 +44,13 @@ public class StartSceneController implements Initializable {
 
     	String curName = txtName.getText();
     	String curDifficulty = selectedRadioButton.getText();
-    	System.out.print(curDifficulty);
+    	boolean isAdmin = curName.equalsIgnoreCase("admin");
 
         if(curName.equals("")){
         	lblNotice.setText("Enter your name, please.");
           	
         } else {       	
-        	initGameData(curName, curDifficulty);
+        	initGameData(curName, curDifficulty, isAdmin);
             lblNotice.setText("Login Success");
             
             Stage primaryStage = new Stage();
@@ -68,20 +68,25 @@ public class StartSceneController implements Initializable {
 
     } 
     
-    public void initGameData(String curName, String curDifficulty) {
+    public void initGameData(String curName, String curDifficulty, boolean isAdmin) {
     	GameData.name = curName;
     	GameData.difficulty = curDifficulty;
     	
+    	if(isAdmin)
+    		GameData.isAdmin = true;
+    	
     	switch(curDifficulty) {
 	    	case "Easy" :
-	    		MapData.DIFFICULTY = 3;
+	            GameData.DIFFICULTY = 3; break;
 	    	case "Normal" :
-	    		MapData.DIFFICULTY = 5;
+	    		GameData.DIFFICULTY = 5; break;
 	    	case "Hard" :
-	    		MapData.DIFFICULTY = 7;
+	    		GameData.DIFFICULTY = 7; break;
 	    	default :
-	    		MapData.DIFFICULTY = 3;
+	    		GameData.DIFFICULTY = 3;
 	    }
+    	
+    	System.out.print(GameData.DIFFICULTY);
     }
 
     public void help(ActionEvent event) throws Exception{  

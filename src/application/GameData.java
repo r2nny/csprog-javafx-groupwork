@@ -4,7 +4,9 @@ package application;
 public class GameData {	
 	public static String name;
 	public static String difficulty;
-
+    public static int DIFFICULTY = 3;
+	
+	public static boolean isAdmin = false;
 	public static int stage = 1;
 	public static int coin = 0;
 	

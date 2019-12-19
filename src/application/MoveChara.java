@@ -92,6 +92,8 @@ public class MoveChara {
             return true;
         } else if (mapData.getMap(posX+dx, posY+dy) == MapData.TYPE_GOAL){
             return true;
+        } else if (mapData.getMap(posX+dx, posY+dy) == MapData.TYPE_ENEMY_SLIME){
+            return true;
         }
         
         return false;

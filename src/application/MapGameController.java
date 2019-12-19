@@ -25,20 +25,25 @@ public class MapGameController implements Initializable {
 //  public Group[] mapGroups;
     
     /* added variables by JEE */ 
+    String adminText = "";
     AudioClip startBgm = new AudioClip(new File("./src/application/bgm/town_bgm.mp3").toURI().toString());
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {   	
-
     	/* added method by JEE */
     	changeBgm("start");
     	
-        name.setText("NAME : " + GameData.name + "\n" + 
-        			 "DIFFICULTY : " + GameData.difficulty + "\n" + 
-        			 "STAGE : " + GameData.stage + "\n" +
-        			 "COIN : " + GameData.coin);	
+    	if(GameData.isAdmin) {
+    		adminText = "*** CHEAT MODE *** \n";
+    	}
     	
-        mapData = new MapData(21,15);
+    	name.setText(adminText +
+					 "NAME : " + GameData.name + "\n" + 
+   			 		 "DIFFICULTY : " + GameData.difficulty + "\n" + 
+   			 		 "STAGE : " + GameData.stage + "\n" +
+   			 		 "COIN : " + GameData.coin);	
+    	
+        mapData = new MapData(21,15, GameData.DIFFICULTY);
         chara = new MoveChara(1,1,mapData);
 //      mapGroups = new Group[mapData.getHeight() * mapData.getWidth()];
         mapImageViews = new ImageView[mapData.getHeight() * mapData.getWidth()];
@@ -171,7 +176,8 @@ public class MapGameController implements Initializable {
             GameData.coin ++;
             
             /* JEE */
-            name.setText("NAME : " + GameData.name + "\n" + 
+            name.setText(adminText +
+            			 "NAME : " + GameData.name + "\n" + 
             			 "DIFFICULTY : " + GameData.difficulty + "\n" +
             			 "STAGE : " + GameData.stage + "\n" +
             			 "COIN : " + GameData.coin);
@@ -182,12 +188,13 @@ public class MapGameController implements Initializable {
         }
         
         if (mapData.getMap(chara.getPosX(), chara.getPosY()) == MapData.TYPE_GOAL){
-            if(GameData.coin == MapData.DIFFICULTY){
+            if(GameData.coin ==  GameData.DIFFICULTY){
                 initialize(null,null);
                 GameData.coin = 0;
                 GameData.stage ++;
                 
-                name.setText("NAME : " + GameData.name + "\n" + 
+                name.setText(adminText +
+                			 "NAME : " + GameData.name + "\n" + 
 		           			 "DIFFICULTY : " + GameData.difficulty + "\n" +
 		           			 "STAGE : " + GameData.stage + "\n" +
 		           			 "COIN : " + GameData.coin);

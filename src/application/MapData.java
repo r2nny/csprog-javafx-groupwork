@@ -8,14 +8,16 @@ public class MapData {
     public static final int TYPE_WALL = 1;
     public static final int TYPE_COIN = 2;
     public static final int TYPE_GOAL = 3;
+    public static final int TYPE_ENEMY_SLIME = 4;
     
-    public static int DIFFICULTY = 3;
+    private int DIFFICULTY = 3;
     
     private static final String mapImageFiles[] = {
         "file:src/application/png/SPACE.png",
         "file:src/application/png/WALL.png",
         "file:src/application/png/COIN.gif",
-        "file:src/application/png/GOAL.png"
+        "file:src/application/png/GOAL.png",
+        "file:src/application/png/SLIME.gif"
     };
    
     private Image[] mapImages;
@@ -24,10 +26,11 @@ public class MapData {
     private int width;
     private int height;
     
-    MapData(int x, int y){
-        mapImages     = new Image[4];
+    MapData(int x, int y, int DIFFICULTY){
+    	this.DIFFICULTY = DIFFICULTY;
+        mapImages     = new Image[5];
         mapImageViews = new ImageView[y][x];
-        for (int i=0; i<4; i++) {
+        for (int i=0; i<5; i++) {
             mapImages[i] = new Image(mapImageFiles[i]);
         }
 
@@ -37,8 +40,9 @@ public class MapData {
 
         fillMap(MapData.TYPE_WALL);
         digMap(1, 3);
-        settingGoal();
-        settingCoin();
+        setGoal();
+        setCoin(DIFFICULTY);
+        setEnemy(DIFFICULTY);
         setImageViews();
         printMap();
     }
@@ -109,21 +113,36 @@ public class MapData {
     }
     
     /* 松本 */
-    public void settingCoin(){ 	
+    public void setCoin(int DIFFICULTY){ 	
         int x,y;
         int i = 0;
+        
         while(i < DIFFICULTY) {
             x = (int)(Math.random() * (width -2) + 1);
             y = (int)(Math.random() * (height-2) + 1);
-            if (getMap(x,y) == MapData.TYPE_NONE){
-                setMap(x,y,MapData.TYPE_COIN);
+            if (getMap(x, y) == MapData.TYPE_NONE){
+                setMap(x, y, MapData.TYPE_COIN);
                 i++;
             }
         }
     }
     
-    public void settingGoal(){
-        setMap(19,13,MapData.TYPE_GOAL);
+    public void setGoal(){
+        setMap(19, 13, MapData.TYPE_GOAL);
+    }
+    
+    public void setEnemy(int DIFFICULTY) {
+    	int x,y;
+        int i = 0;
+        
+        while(i < DIFFICULTY-3) {
+            x = (int)(Math.random() * (width -2) + 1);
+            y = (int)(Math.random() * (height-2) + 1);
+            if (getMap(x, y) == MapData.TYPE_NONE){
+                setMap(x, y, MapData.TYPE_ENEMY_SLIME);
+                i++;
+            }
+        }
     }
 
     public void printMap(){
