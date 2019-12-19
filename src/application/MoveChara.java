@@ -88,7 +88,9 @@ public class MoveChara {
             return true;
         
         /* 松本 */
-        } else if (mapData.getMap(posX+dx, posY+dy) == MapData.TYPE_ITEM){
+        } else if (mapData.getMap(posX+dx, posY+dy) == MapData.TYPE_COIN){
+            return true;
+        } else if (mapData.getMap(posX+dx, posY+dy) == MapData.TYPE_GOAL){
             return true;
         }
         

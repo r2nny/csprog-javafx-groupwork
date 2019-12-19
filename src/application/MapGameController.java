@@ -16,15 +16,13 @@ import javafx.scene.input.KeyCode;
 
 public class MapGameController implements Initializable {  
 	@FXML private Label name;	
+	@FXML private Label noticeLabel;
 
     public MapData mapData;
     public MoveChara chara;
     public GridPane mapGrid;
     public ImageView[] mapImageViews;
 //  public Group[] mapGroups;
-    
-    /* 松本 */
-    public int item = 0;
     
     /* added variables by JEE */ 
     AudioClip startBgm = new AudioClip(new File("./src/application/bgm/town_bgm.mp3").toURI().toString());
@@ -34,9 +32,11 @@ public class MapGameController implements Initializable {
 
     	/* added method by JEE */
     	changeBgm("start");
+    	
         name.setText("NAME : " + GameData.name + "\n" + 
         			 "DIFFICULTY : " + GameData.difficulty + "\n" + 
-        			 "ITEM : " + item);	
+        			 "STAGE : " + GameData.stage + "\n" +
+        			 "COIN : " + GameData.coin);	
     	
         mapData = new MapData(21,15);
         chara = new MoveChara(1,1,mapData);
@@ -54,8 +54,8 @@ public class MapGameController implements Initializable {
     
     /* added method by JEE */
     public void changeBgm(String scene) { 
-    	startBgm.setCycleCount(AudioClip.INDEFINITE);  	
     	startBgm.stop();
+    	startBgm.setCycleCount(AudioClip.INDEFINITE);  	
     	
     	switch(scene) {
     		case "start" :
@@ -167,17 +167,37 @@ public class MapGameController implements Initializable {
     
     /* 松本 */
     public void judge() {
-        if (mapData.getMap(chara.getPosX(), chara.getPosY()) == MapData.TYPE_ITEM){
-            item += 1;
+        if (mapData.getMap(chara.getPosX(), chara.getPosY()) == MapData.TYPE_COIN){
+            GameData.coin ++;
             
             /* JEE */
             name.setText("NAME : " + GameData.name + "\n" + 
-            			 "DIFFICULTY : " + GameData.difficulty + "\n" + 
-            			 "ITEM : " + item);
+            			 "DIFFICULTY : " + GameData.difficulty + "\n" +
+            			 "STAGE : " + GameData.stage + "\n" +
+            			 "COIN : " + GameData.coin);
             
             mapData.setMap(chara.getPosX(), chara.getPosY(), MapData.TYPE_NONE);
             mapData.setImageViews();
             mapImageViews[chara.getPosY() * mapData.getWidth() + chara.getPosX()] = mapData.getImageView(chara.getPosX(), chara.getPosY());
+        }
+        
+        if (mapData.getMap(chara.getPosX(), chara.getPosY()) == MapData.TYPE_GOAL){
+            if(GameData.coin == MapData.DIFFICULTY){
+                initialize(null,null);
+                GameData.coin = 0;
+                GameData.stage ++;
+                
+                name.setText("NAME : " + GameData.name + "\n" + 
+		           			 "DIFFICULTY : " + GameData.difficulty + "\n" +
+		           			 "STAGE : " + GameData.stage + "\n" +
+		           			 "COIN : " + GameData.coin);
+                
+                noticeLabel.setText("Stage " + GameData.stage);	
+                
+            } else {
+                System.out.println("You don't have enough coin.");
+                noticeLabel.setText("You don't have enough coin.");	            
+            }
         }
     }
 }

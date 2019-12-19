@@ -4,25 +4,30 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class MapData {
-    public static final int TYPE_NONE   = 0;
-    public static final int TYPE_WALL   = 1;
-    public static final int TYPE_ITEM = 2;
+    public static final int TYPE_NONE = 0;
+    public static final int TYPE_WALL = 1;
+    public static final int TYPE_COIN = 2;
+    public static final int TYPE_GOAL = 3;
+    
+    public static int DIFFICULTY = 3;
+    
     private static final String mapImageFiles[] = {
         "file:src/application/png/SPACE.png",
         "file:src/application/png/WALL.png",
-        "file:src/application/png/ITEM.png" 
+        "file:src/application/png/COIN.gif",
+        "file:src/application/png/GOAL.png"
     };
-
+   
     private Image[] mapImages;
     private ImageView[][] mapImageViews;
     private int[][] maps;
     private int width;
     private int height;
-
+    
     MapData(int x, int y){
-        mapImages     = new Image[3];
+        mapImages     = new Image[4];
         mapImageViews = new ImageView[y][x];
-        for (int i=0; i<3; i++) {
+        for (int i=0; i<4; i++) {
             mapImages[i] = new Image(mapImageFiles[i]);
         }
 
@@ -32,7 +37,8 @@ public class MapData {
 
         fillMap(MapData.TYPE_WALL);
         digMap(1, 3);
-        settingItem();
+        settingGoal();
+        settingCoin();
         setImageViews();
         printMap();
     }
@@ -91,7 +97,7 @@ public class MapData {
             dl[r] = tmp;
         }
 
-        for (int i=0; i<dl.length; i++){
+        for (int i=0; i<dl.length; i++) {
             int dx = dl[i][0];
             int dy = dl[i][1];
             if (getMap(x+dx*2, y+dy*2) == MapData.TYPE_WALL){
@@ -103,29 +109,37 @@ public class MapData {
     }
     
     /* 松本 */
-    public void settingItem(){
+    public void settingCoin(){ 	
         int x,y;
-        int i=0;
-        while(i<3){
+        int i = 0;
+        while(i < DIFFICULTY) {
             x = (int)(Math.random() * (width -2) + 1);
             y = (int)(Math.random() * (height-2) + 1);
             if (getMap(x,y) == MapData.TYPE_NONE){
-                setMap(x,y,MapData.TYPE_ITEM);
+                setMap(x,y,MapData.TYPE_COIN);
                 i++;
             }
         }
+    }
+    
+    public void settingGoal(){
+        setMap(19,13,MapData.TYPE_GOAL);
     }
 
     public void printMap(){
         for (int y=0; y<height; y++){
             for (int x=0; x<width; x++){
-                if (getMap(x,y) == MapData.TYPE_WALL){
-                    System.out.print("++");
-                }else{
-                    System.out.print("  ");
+            	 if (getMap(x,y) == MapData.TYPE_WALL) {
+                     System.out.print("++");
+                 } else if(getMap(x,y) == MapData.TYPE_COIN) {
+                     System.out.print("CN");
+                 } else if(getMap(x,y) == MapData.TYPE_GOAL) {
+                     System.out.print("GL");
+                 } else {
+                     System.out.print("  ");
                 }
             }
             System.out.print("\n");
         }
-    }
+    }   
 }

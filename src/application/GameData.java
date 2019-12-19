@@ -4,6 +4,29 @@ package application;
 public class GameData {	
 	public static String name;
 	public static String difficulty;
+
+	public static int stage = 1;
+	public static int coin = 0;
+	
+    public void countCoin(){
+        coin++;
+    }
+    
+    public void countStage(){
+        stage++;
+    }
+
+    public void resetCoin(){
+        coin = 0;
+    }
+    
+    public int getCoin(){
+        return coin;
+    }
+
+    public int getStage(){
+        return stage;
+    }
 	
 	/*
 	private String name;

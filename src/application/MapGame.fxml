@@ -23,13 +23,13 @@
 	<Button onAction="#func4ButtonAction" prefWidth="100" text="FUNC4" />
       </children>
     </HBox>
-      <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
       	<GridPane alignment="center" hgap="10" maxHeight="105.0" maxWidth="110.0" vgap="10">
       	  <Button onAction="#upButtonAction" text="↑" GridPane.columnIndex="1" GridPane.rowIndex="0" />
       	  <Button onAction="#leftButtonAction" text="←" GridPane.columnIndex="0" GridPane.rowIndex="1" />
       	  <Button onAction="#rightButtonAction" text="→" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-      	  <Button onAction="#downButtonAction" text="↓" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      	  <Button onAction="#downButtonAction" text="↓" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                <columnConstraints>
                   <ColumnConstraints />
                   <ColumnConstraints />
@@ -41,18 +41,29 @@
                   <RowConstraints />
                </rowConstraints>
                <HBox.margin>
-                  <Insets />
+                  <Insets left="30.0" />
                </HBox.margin>
       	</GridPane>
-            <Label fx:id="name" alignment="CENTER" text="Name : NONE">
+            <VBox minWidth="200.0" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="name" alignment="CENTER" text="Name : NONE" />
+               </children>
                <HBox.margin>
-                  <Insets left="50.0" top="20.0" />
+                  <Insets left="50.0" />
                </HBox.margin>
-            </Label>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </VBox>
          </children>
          <VBox.margin>
             <Insets bottom="15.0" top="15.0" />
          </VBox.margin>
+      </HBox>
+      <HBox alignment="TOP_CENTER">
+         <children>
+            <Label fx:id="noticeLabel" alignment="CENTER" prefHeight="30.0" text="..." />
+         </children>
       </HBox>
     <GridPane fx:id="mapGrid" prefHeight="360" prefWidth="360">
     </GridPane>

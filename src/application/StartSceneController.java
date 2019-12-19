@@ -44,6 +44,7 @@ public class StartSceneController implements Initializable {
 
     	String curName = txtName.getText();
     	String curDifficulty = selectedRadioButton.getText();
+    	System.out.print(curDifficulty);
 
         if(curName.equals("")){
         	lblNotice.setText("Enter your name, please.");
@@ -70,6 +71,17 @@ public class StartSceneController implements Initializable {
     public void initGameData(String curName, String curDifficulty) {
     	GameData.name = curName;
     	GameData.difficulty = curDifficulty;
+    	
+    	switch(curDifficulty) {
+	    	case "Easy" :
+	    		MapData.DIFFICULTY = 3;
+	    	case "Normal" :
+	    		MapData.DIFFICULTY = 5;
+	    	case "Hard" :
+	    		MapData.DIFFICULTY = 7;
+	    	default :
+	    		MapData.DIFFICULTY = 3;
+	    }
     }
 
     public void help(ActionEvent event) throws Exception{  
