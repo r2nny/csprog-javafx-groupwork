@@ -46,7 +46,7 @@
       	</GridPane>
             <VBox minWidth="200.0" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label fx:id="name" alignment="CENTER" text="Name : NONE" />
+                  <Label fx:id="metadataLabel" alignment="CENTER" text="Name : NONE" />
                </children>
                <HBox.margin>
                   <Insets left="50.0" />
@@ -65,7 +65,7 @@
             <Label fx:id="noticeLabel" alignment="CENTER" prefHeight="30.0" text="..." />
          </children>
       </HBox>
-    <GridPane fx:id="mapGrid" prefHeight="360" prefWidth="360">
+    <GridPane fx:id="mapGrid">
     </GridPane>
 
   </children>

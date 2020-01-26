@@ -17,41 +17,49 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.ImageView;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage; 
 
 public class StartSceneController implements Initializable {
-	
-	@FXML private Button startButton;
-    @FXML private Label lblNotice;    
+	@FXML private Button easyButton;
+	@FXML private Button normalButton;
+	@FXML private Button hardButton; 
+	@FXML private Button helpButton;
+	@FXML private ImageView game_title;
     @FXML private TextField txtName; 
-    @FXML private ToggleGroup difficulty;
-    
-    @FXML private RadioButton easy;
-    @FXML private RadioButton normal;
-    @FXML private RadioButton hard;
 
 	AudioClip startBgm = new AudioClip(new File("./src/application/bgm/town_bgm.mp3").toURI().toString());
+	
+	static GameData gameData = GameData.getInstance();
+	
+	final int EASY = 3;
+	final int NORMAL = 5;
+	final int HARD = 7;
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		startBgm.play();
-		easy.setSelected(true);
 	}
 	
-    public void start(ActionEvent event) throws Exception{
-    	RadioButton selectedRadioButton = (RadioButton) difficulty.getSelectedToggle();
+	public void easyButtonAction(ActionEvent event) throws Exception{
+		start(EASY);
+	}
+	
+	public void normalButtonAction(ActionEvent event) throws Exception{
+		start(NORMAL);
+	}
+	public void hardButtonAction(ActionEvent event) throws Exception{
+		start(HARD);
+	}
+	
+    public void start(int difficulty) throws Exception{
+    	String name = txtName.getText();
 
-    	String curName = txtName.getText();
-    	String curDifficulty = selectedRadioButton.getText();
-    	boolean isAdmin = curName.equalsIgnoreCase("admin");
+    	boolean isAdmin = name.equalsIgnoreCase("ああああ") || name.equalsIgnoreCase("AAAA");
 
-        if(curName.equals("")){
-        	lblNotice.setText("Enter your name, please.");
-          	
-        } else {       	
-        	initGameData(curName, curDifficulty, isAdmin);
-            lblNotice.setText("Login Success");
+        if(!name.equals("")){       	      	
+        	initGameData(gameData, name, difficulty, isAdmin);
             
             Stage primaryStage = new Stage();
             Parent main = FXMLLoader.load(getClass().getResource("MapGame.fxml"));
@@ -60,36 +68,23 @@ public class StartSceneController implements Initializable {
                    
             primaryStage.setScene(scene);           
             primaryStage.show();        
-            primaryStage.setTitle("MAP GAME");
+            primaryStage.setTitle("8-bit Dungeon");
             
-            Stage start = (Stage) startButton.getScene().getWindow();
+            Stage start = (Stage) game_title.getScene().getWindow();
             start.close();
         }        
 
     } 
     
-    public void initGameData(String curName, String curDifficulty, boolean isAdmin) {
-    	GameData.name = curName;
-    	GameData.difficulty = curDifficulty;
+    public void initGameData(GameData g, String name, int difficulty, boolean isAdmin) {
+    	g.setName(name);
+    	g.setDifficulty(difficulty);
     	
     	if(isAdmin)
-    		GameData.isAdmin = true;
-    	
-    	switch(curDifficulty) {
-	    	case "Easy" :
-	            GameData.DIFFICULTY = 3; break;
-	    	case "Normal" :
-	    		GameData.DIFFICULTY = 5; break;
-	    	case "Hard" :
-	    		GameData.DIFFICULTY = 7; break;
-	    	default :
-	    		GameData.DIFFICULTY = 3;
-	    }
-    	
-    	System.out.print(GameData.DIFFICULTY);
+    		g.setIsAdmin(true);
     }
 
-    public void help(ActionEvent event) throws Exception{  
+    public void helpButtonAction(ActionEvent event) throws Exception{  
     }
 
 }

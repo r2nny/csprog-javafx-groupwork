@@ -15,49 +15,57 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 
 public class MapGameController implements Initializable {  
-	@FXML private Label name;	
+	@FXML private Label metadataLabel;	
 	@FXML private Label noticeLabel;
 
-    public MapData mapData;
-    public MoveChara chara;
     public GridPane mapGrid;
     public ImageView[] mapImageViews;
 //  public Group[] mapGroups;
     
-    /* added variables by JEE */ 
     String adminText = "";
     AudioClip startBgm = new AudioClip(new File("./src/application/bgm/town_bgm.mp3").toURI().toString());
-
+    
+    private final static int MAP_WIDTH = 52;
+    private final static int MAP_HEIGHT = 36; 
+    private final static int VIEW_WIDTH  = 13;
+    private final static int VIEW_HEIGHT = 9;
+    private static int chara_x, chara_y;
+    
+    // playable character
+    public static final int TYPE_CHARA_PRIST = 20;
+    private int mainChara = TYPE_CHARA_PRIST;
+    
+    GameData gameData = GameData.getInstance();
+    MapData mapData = MapData.getInstance();
+    MoveChara moveChara = MoveChara.getInstance();
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {   	
-    	/* added method by JEE */
     	changeBgm("start");
     	
-    	if(GameData.isAdmin) {
+    	if(gameData.getIsAdmin()) {
     		adminText = "*** CHEAT MODE *** \n";
     	}
     	
-    	name.setText(adminText +
-					 "NAME : " + GameData.name + "\n" + 
-   			 		 "DIFFICULTY : " + GameData.difficulty + "\n" + 
-   			 		 "STAGE : " + GameData.stage + "\n" +
-   			 		 "COIN : " + GameData.coin);	
-    	
-        mapData = new MapData(21,15, GameData.DIFFICULTY);
-        chara = new MoveChara(1,1,mapData);
+    	setMetadataText(gameData);
 //      mapGroups = new Group[mapData.getHeight() * mapData.getWidth()];
-        mapImageViews = new ImageView[mapData.getHeight() * mapData.getWidth()];
-        for(int y=0; y<mapData.getHeight(); y++){
-            for(int x=0; x<mapData.getWidth(); x++){
-                int index = y*mapData.getWidth() + x;
-                mapImageViews[index] = mapData.getImageView(x,y);
-            }
-        }
-        mapPrint(chara, mapData);
+        mapImageViews = new ImageView[MAP_HEIGHT * MAP_WIDTH];
+        mapPrint(moveChara, mapData);
   
     }
     
-    /* added method by JEE */
+    // refresh view 13*9
+    public void loadImageViews() {   
+    	mapData.setImageViews();
+    	
+    	for(int y=0; y<VIEW_HEIGHT; y++){
+            for(int x=0; x<VIEW_WIDTH; x++){
+                int index = y * VIEW_WIDTH + x;
+                mapImageViews[index] = mapData.getImageView(x, y);
+            }
+        }    	
+    }
+
     public void changeBgm(String scene) { 
     	startBgm.stop();
     	startBgm.setCycleCount(AudioClip.INDEFINITE);  	
@@ -69,21 +77,20 @@ public class MapGameController implements Initializable {
     			
     	    default :
     	    	startBgm.play();
-    	    	} 	
+        } 	
     }
 	
     public void mapPrint(MoveChara c, MapData m){
-        int cx = c.getPosX();
-        int cy = c.getPosY();
+    	loadImageViews();
         mapGrid.getChildren().clear();
-        for(int y=0; y<mapData.getHeight(); y++){
-            for(int x=0; x<mapData.getWidth(); x++){
-                int index = y*mapData.getWidth() + x;
-                if (x==cx && y==cy) {
-                    mapGrid.add(c.getCharaImageView(), x, y);
-                } else {
-                    mapGrid.add(mapImageViews[index], x, y);
-                }
+        
+        for(int y=0; y<VIEW_HEIGHT; y++){
+            for(int x=0; x<VIEW_WIDTH; x++){
+                int index = y * VIEW_WIDTH + x;
+                
+                // prevents illegalArgumentException
+                mapGrid.getChildren().remove(mapImageViews[index]);
+                mapGrid.add(mapImageViews[index], x, y);                
             }
         }
     }
@@ -112,13 +119,11 @@ public class MapGameController implements Initializable {
 
     public void downButtonAction(){
         outputAction("DOWN");
-        chara.setCharaDir(MoveChara.TYPE_DOWN);
-        chara.move(0, 1);
-        
-        /* 松本 */
-        judge();
-        
-        mapPrint(chara, mapData);
+        moveChara.move(0, 1);
+
+        judge(mapData, gameData);      
+        mapPrint(moveChara, mapData);
+        mapData.printMap();
     }
     
     public void downButtonAction(ActionEvent event) {
@@ -127,28 +132,23 @@ public class MapGameController implements Initializable {
 
     public void rightButtonAction(){
         outputAction("RIGHT");
-        chara.setCharaDir(MoveChara.TYPE_RIGHT);
-        chara.move( 1, 0);
-        
-        /* 松本 */
-        judge();
-        
-        mapPrint(chara, mapData);
+        moveChara.move( 1, 0);
+
+        judge(mapData, gameData);      
+        mapPrint(moveChara, mapData);
+        mapData.printMap();
     }
     public void rightButtonAction(ActionEvent event) {
         rightButtonAction();
     }
-    
-    /* added method by JEE (LEFT, UP) */
+
     public void leftButtonAction(){
         outputAction("LEFT");
-        chara.setCharaDir(MoveChara.TYPE_LEFT);
-        chara.move(-1, 0);
-        
-        /* 松本 */
-        judge();
-        
-        mapPrint(chara, mapData);
+        moveChara.move(-1, 0);
+
+        judge(mapData, gameData);       
+        mapPrint(moveChara, mapData);
+        mapData.printMap();
     }
     
     public void leftButtonAction(ActionEvent event) {
@@ -157,54 +157,52 @@ public class MapGameController implements Initializable {
     
     public void upButtonAction(){
         outputAction("UP");
-        chara.setCharaDir(MoveChara.TYPE_UP);
-        chara.move(0, -1);
-        
-        /* 松本 */
-        judge();
-        
-        mapPrint(chara, mapData);
+        moveChara.move(0, -1);
+
+        judge(mapData, gameData);       
+        mapPrint(moveChara, mapData);
+        mapData.printMap();
     }
     
     public void upButtonAction(ActionEvent event) {
         upButtonAction();
     }
-    
-    /* 松本 */
-    public void judge() {
-        if (mapData.getMap(chara.getPosX(), chara.getPosY()) == MapData.TYPE_COIN){
-            GameData.coin ++;
-            
-            /* JEE */
-            name.setText(adminText +
-            			 "NAME : " + GameData.name + "\n" + 
-            			 "DIFFICULTY : " + GameData.difficulty + "\n" +
-            			 "STAGE : " + GameData.stage + "\n" +
-            			 "COIN : " + GameData.coin);
-            
-            mapData.setMap(chara.getPosX(), chara.getPosY(), MapData.TYPE_NONE);
-            mapData.setImageViews();
-            mapImageViews[chara.getPosY() * mapData.getWidth() + chara.getPosX()] = mapData.getImageView(chara.getPosX(), chara.getPosY());
-        }
+
+    public void judge(MapData m, GameData g) {
+    	chara_x =  m.getChara_x();
+    	chara_y =  m.getChara_y();
         
-        if (mapData.getMap(chara.getPosX(), chara.getPosY()) == MapData.TYPE_GOAL){
-            if(GameData.coin ==  GameData.DIFFICULTY){
+        if (mapData.getMap(chara_x, chara_y) == MapData.TYPE_GOAL){
+            if(g.getCoin() ==  g.getDifficulty()){
                 initialize(null,null);
-                GameData.coin = 0;
-                GameData.stage ++;
+                g.addCoin();
+                g.addStage();
                 
-                name.setText(adminText +
-                			 "NAME : " + GameData.name + "\n" + 
-		           			 "DIFFICULTY : " + GameData.difficulty + "\n" +
-		           			 "STAGE : " + GameData.stage + "\n" +
-		           			 "COIN : " + GameData.coin);
-                
-                noticeLabel.setText("Stage " + GameData.stage);	
+                noticeLabel.setText("Stage " + g.getStage());	
                 
             } else {
                 System.out.println("You don't have enough coin.");
                 noticeLabel.setText("You don't have enough coin.");	            
             }
         }
+        
+        setMetadataText(gameData);
     }
+    
+    public void setMetadataText(GameData g) {
+    	metadataLabel.setText(adminText +
+		   			 "NAME : " + g.getName() + "\n" + 
+		   			 "DIFFICULTY : " + g.getDifficulty() + "\n" +
+		   			 "STAGE : " + g.getStage() + "\n" +
+		   			 "COIN : " + g.getCoin());
+    	
+    }
+
+	public void getCharaLocation() {
+		int[] chara_location = new int[2];
+		
+		chara_location = MapData.getObject(TYPE_CHARA_PRIST);
+		chara_x = chara_location[0];
+		chara_x = chara_location[1];
+	}		
 }
