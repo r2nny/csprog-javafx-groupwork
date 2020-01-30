@@ -6,6 +6,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -69,6 +70,9 @@ public class StartSceneController implements Initializable {
             primaryStage.setScene(scene);           
             primaryStage.show();        
             primaryStage.setTitle("8-bit Dungeon");
+            primaryStage.setOnCloseRequest(event -> {
+            	Platform.exit();
+            });
             
             Stage start = (Stage) game_title.getScene().getWindow();
             start.close();

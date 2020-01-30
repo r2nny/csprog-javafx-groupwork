@@ -2,21 +2,40 @@ package application;
 
 import java.net.URL;
 import java.io.File;
+import java.io.IOException;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.media.AudioClip;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 
 public class MapGameController implements Initializable {  
 	@FXML private Label metadataLabel;	
 	@FXML private Label noticeLabel;
+	@FXML private ImageView heart1;
+	@FXML private ImageView heart2; 
+	@FXML private ImageView heart3;
+	@FXML private ImageView heart4;
+	@FXML private ImageView heart5;
+	@FXML private ImageView heart6;
+	
+	@FXML private ImageView[] heart = new ImageView[6];
+	
+	Image heart_zero = new Image("file:src/application/png/chara/heart_zero.png");
+	Image heart_half = new Image("file:src/application/png/chara/heart_half.png");
+	Image heart_full = new Image("file:src/application/png/chara/heart_full.png");
 
     public GridPane mapGrid;
     public ImageView[] mapImageViews;
@@ -32,21 +51,30 @@ public class MapGameController implements Initializable {
     private static int chara_x, chara_y;
     
     // playable character
-    public static final int TYPE_CHARA_PRIST = 20;
+    public static final int TYPE_CHARA_PRIST = 18;
     private int mainChara = TYPE_CHARA_PRIST;
     
     GameData gameData = GameData.getInstance();
     MapData mapData = MapData.getInstance();
     MoveChara moveChara = MoveChara.getInstance();
+    Chara chara = Chara.getInstance();
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {   	
+    public void initialize(URL url, ResourceBundle rb) { 
     	changeBgm("start");
     	
     	if(gameData.getIsAdmin()) {
     		adminText = "*** CHEAT MODE *** \n";
     	}
     	
+    	heart[0] = heart1;
+    	heart[1] = heart2;
+    	heart[2] = heart3;
+    	heart[3] = heart4;
+    	heart[4] = heart5;
+    	heart[5] = heart6;
+    	
+    	showHeart();
     	setMetadataText(gameData);
 //      mapGroups = new Group[mapData.getHeight() * mapData.getWidth()];
         mapImageViews = new ImageView[MAP_HEIGHT * MAP_WIDTH];
@@ -75,8 +103,13 @@ public class MapGameController implements Initializable {
     			startBgm.play();
     			break;
     			
+    		case "stop" :
+    			startBgm.stop();
+    			break;
+    			
     	    default :
     	    	startBgm.play();
+    	    	
         } 	
     }
 	
@@ -100,93 +133,84 @@ public class MapGameController implements Initializable {
     public void func3ButtonAction(ActionEvent event) { }
     public void func4ButtonAction(ActionEvent event) { }
 
-    public void keyAction(KeyEvent event){
+    public void keyAction(KeyEvent event) throws Exception{
         KeyCode key = event.getCode();
         if (key == KeyCode.DOWN){
-            downButtonAction();
+            buttonAction("DOWN");
         } else if (key == KeyCode.RIGHT){
-            rightButtonAction();
+            buttonAction("RIGHT");
         } else if (key == KeyCode.LEFT){
-            leftButtonAction();
+            buttonAction("LEFT");
         } else if (key == KeyCode.UP){
-            upButtonAction();
+            buttonAction("UP");
         }
     }
-
-    public void outputAction(String actionString) {
-        System.out.println("Select Action: " + actionString);
-    }
-
-    public void downButtonAction(){
-        outputAction("DOWN");
-        moveChara.move(0, 1);
-
-        judge(mapData, gameData);      
+    
+    public void buttonAction(String key) throws Exception {
+    	int dx = 0, dy = 0;
+    	
+    	switch(key) {
+    	case "DOWN" :
+    		dx =  0; dy =  1; break;
+    	case "RIGHT" :
+    		dx =  1; dy =  0; break;
+    	case "LEFT" :
+    		dx = -1; dy =  0; break;
+    	case "UP" :
+    		dx =  0; dy = -1; break;
+    	}
+    	
+    	moveChara.move(dx, dy);
+    	judge(mapData, gameData, dx, dy);      
         mapPrint(moveChara, mapData);
-        mapData.printMap();
     }
     
-    public void downButtonAction(ActionEvent event) {
-        downButtonAction();
-    }
-
-    public void rightButtonAction(){
-        outputAction("RIGHT");
-        moveChara.move( 1, 0);
-
-        judge(mapData, gameData);      
-        mapPrint(moveChara, mapData);
-        mapData.printMap();
-    }
-    public void rightButtonAction(ActionEvent event) {
-        rightButtonAction();
-    }
-
-    public void leftButtonAction(){
-        outputAction("LEFT");
-        moveChara.move(-1, 0);
-
-        judge(mapData, gameData);       
-        mapPrint(moveChara, mapData);
-        mapData.printMap();
-    }
-    
-    public void leftButtonAction(ActionEvent event) {
-        leftButtonAction();
-    }
-    
-    public void upButtonAction(){
-        outputAction("UP");
-        moveChara.move(0, -1);
-
-        judge(mapData, gameData);       
-        mapPrint(moveChara, mapData);
-        mapData.printMap();
-    }
-    
-    public void upButtonAction(ActionEvent event) {
-        upButtonAction();
-    }
-
-    public void judge(MapData m, GameData g) {
+    // TODO: refactoring
+    public void judge(MapData m, GameData g, int dx, int dy) throws Exception {
+    	if(g.getIsGameOver()) { 
+    		changeBgm("stop");
+    		Stage primaryStage = new Stage();
+            Parent main = FXMLLoader.load(getClass().getResource("GameOver.fxml"));
+            Scene scene = new Scene(main);
+                   
+            primaryStage.setScene(scene);   
+            primaryStage.initStyle(StageStyle.UNDECORATED);
+            primaryStage.show();        
+    	}   	
+    	
     	chara_x =  m.getChara_x();
     	chara_y =  m.getChara_y();
         
-        if (mapData.getMap(chara_x, chara_y) == MapData.TYPE_GOAL){
-            if(g.getCoin() ==  g.getDifficulty()){
-                initialize(null,null);
-                g.addCoin();
-                g.addStage();
-                
-                noticeLabel.setText("Stage " + g.getStage());	
-                
+        if (mapData.getMap(chara_x + dx, chara_y + dy) == MapData.TYPE_TILE_GOAL){
+            if(g.getCoin() >=  g.getDifficulty()){                          
+                noticeLabel.setText("Stage " + g.getStage());	               
             } else {
-                System.out.println("You don't have enough coin.");
                 noticeLabel.setText("You don't have enough coin.");	            
             }
         }
         
+        showHeart();
         setMetadataText(gameData);
+    }
+    
+    public void showHeart() {
+    	int curHp = chara.getHp();
+    	int temHp = curHp;
+    			
+    	for(int i=0; i<heart.length; i++) {
+    		if(temHp >= 2) {
+    			heart[i].setImage(heart_full);
+    			temHp -= 2;
+    			continue;
+    		} else if (temHp == 1) {
+    			heart[i].setImage(heart_half);
+    			temHp -= 1;
+    			continue;
+    		} else {
+    			heart[i].setImage(heart_zero);
+    		}
+    		
+    	}
     }
     
     public void setMetadataText(GameData g) {
@@ -194,7 +218,8 @@ public class MapGameController implements Initializable {
 		   			 "NAME : " + g.getName() + "\n" + 
 		   			 "DIFFICULTY : " + g.getDifficulty() + "\n" +
 		   			 "STAGE : " + g.getStage() + "\n" +
-		   			 "COIN : " + g.getCoin());
+		   			 "COIN : " + g.getCoin() + "\n" +
+    				 "COIN : " + chara.getHp());
     	
     }
 

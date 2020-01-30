@@ -3,6 +3,7 @@ package application;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
@@ -16,8 +17,9 @@ public class MapGame extends Application {
     	  
     	    scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
     	    primaryStage.setScene(scene);
+    	    primaryStage.initStyle(StageStyle.UNDECORATED);
     	    primaryStage.show();
-    	    primaryStage.setTitle("Welcome to MapGame");
+    	    primaryStage.setTitle("8-bit Dungeon");
     	       	    
 	    } catch(Exception e) {
 	    	e.printStackTrace();

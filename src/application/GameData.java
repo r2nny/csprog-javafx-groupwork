@@ -5,7 +5,7 @@ public class GameData {
 	private static GameData gameData = new GameData();
 	
 	// playable character
-    public static final int TYPE_CHARA_PRIST = 20;
+    public static final int TYPE_CHARA_PRIST = 18;
 
 	// default
 	private static String name = "NONE";
@@ -14,6 +14,9 @@ public class GameData {
 	private static int mainChara = TYPE_CHARA_PRIST;
 	private static int stage = 1;
 	private static int coin = 0;
+	
+	private static boolean isGameOver = false;
+	private static boolean isGameClear = false;
 	
 	GameData(){
 	}
@@ -34,6 +37,8 @@ public class GameData {
 	public void setMainChara(int n)  {this.mainChara = n;}
 	public void setStage(int n)      {this.stage = n;}
 	public void setCoin(int n)       {this.coin = n;}
+	public void setIsGameOver(boolean isGameOver) {this.isGameOver = isGameOver;}
+	public void setIsGameClear(boolean isGameClear) {this.isGameClear = isGameClear;}
 	
 	public static String getName()    {return name;}
 	public static boolean getIsAdmin(){return isAdmin;}
@@ -41,7 +46,8 @@ public class GameData {
 	public static int getMainChara()  {return mainChara;}
 	public static int getStage()      {return stage;}
 	public static int getCoin()       {return coin;}
-
+	public boolean getIsGameOver() {return isGameOver;}
+	public boolean getIsGameClear() {return isGameClear;}
 
 
 }

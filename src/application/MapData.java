@@ -32,16 +32,27 @@ public class MapData { // Singleton class
     public static final int TYPE_TWO_TONE1_TILE = 14;
     public static final int TYPE_TWO_TONE2_TILE = 15;
     public static final int TYPE_BLANK = 16;
-    
-    public static final int TYPE_COIN = 17;
-    public static final int TYPE_GOAL = 18;
-    public static final int TYPE_ENEMY_SLIME = 19;
+    public static final int TYPE_AISLE_WALKABLE_TILE = 17;
     
     // playable character
-    public static final int TYPE_CHARA_PRIST = 20;
+    public static final int TYPE_CHARA_PRIST = 18;
+    
+    // items
+    public static final int TYPE_ENEMY_SLIME_HP3 = 19;
+    public static final int TYPE_ENEMY_SLIME_HP2 = 20;
+    public static final int TYPE_ENEMY_SLIME_HP1 = 21;
+    public static final int TYPE_ENEMY_FLY_HP3 = 22;
+    public static final int TYPE_ENEMY_FLY_HP2 = 23;
+    public static final int TYPE_ENEMY_FLY_HP1 = 24;
+    public static final int TYPE_ITEM_COIN = 25;
+    public static final int TYPE_TILE_GOAL = 26;
+    public static final int TYPE_ITEM_CHEST = 27;
+    public static final int TYPE_ITEM_KEY_GOLD = 28;
+    public static final int TYPE_ITEM_KEY_SILVER = 29;
+
     
     private static final String mapImageFiles[] = {
-    	// tiles (17 types) 0~16
+    	// tiles (17 types) 0~17
     	"file:src/application/png/tiles/walkable_tile_1.png",
         "file:src/application/png/tiles/top_tile_1.png",
         "file:src/application/png/tiles/right_tile_2.png",
@@ -59,18 +70,28 @@ public class MapData { // Singleton class
         "file:src/application/png/tiles/two_tone_tile_1.png",
         "file:src/application/png/tiles/two_tone_tile_2.png",
         "file:src/application/png/tiles/blank.png",
-        // items
+        "file:src/application/png/tiles/walkable_tile_1.png",
         
+        // playable character 18    
+        "file:src/application/png/chara/prist.gif",
+        
+        // items and enemies 19~
+        "file:src/application/png/enemies/slime_hp3.gif",
+        "file:src/application/png/enemies/slime_hp2.gif",
+        "file:src/application/png/enemies/slime_hp1.gif",
+        "file:src/application/png/enemies/fly_hp3.gif",
+        "file:src/application/png/enemies/fly_hp2.gif",
+        "file:src/application/png/enemies/fly_hp1.gif",
         "file:src/application/png/items/COIN.gif",
         "file:src/application/png/tiles/GOAL.png",
-        "file:src/application/png/enemies/SLIME.gif",
-        "file:src/application/png/chara/prist.gif",
-        "file:src/application/png/tiles/walkable_tile_1.png"
+        "file:src/application/png/items/mini_chest.gif",
+        "file:src/application/png/items/key_gold.gif",
+        "file:src/application/png/items/key_silver.gif"
     };
     
-    private int DIFFICULTY = 3;
-    private int mainChara = TYPE_CHARA_PRIST;
-    private final int numOfImage = mapImageFiles.length;
+    private static int DIFFICULTY = 3;
+    private static int mainChara = TYPE_CHARA_PRIST;
+    private final static int numOfImage = mapImageFiles.length;
     
     // Map size =  52 * 36, editable part size = 42 * 30 ,View = 13 * 9
     // Width and height must be "odd"
@@ -83,7 +104,7 @@ public class MapData { // Singleton class
     private static int chara_x, chara_y;
     private static int[][] maps = new int[MAP_HEIGHT][MAP_WIDTH]; 
     
-    private Image[] mapImages = new Image[numOfImage];
+    private static Image[] mapImages = new Image[numOfImage];
     private static ImageView[][] mapImageViews = new ImageView[VIEW_HEIGHT][VIEW_WIDTH];
    
     static GameData gameData = GameData.getInstance();
@@ -94,19 +115,30 @@ public class MapData { // Singleton class
     MapData(int DIFFICULTY, int currentStage, int chara){
     	this.DIFFICULTY = DIFFICULTY;
     	this.setMainChara(chara);
+    	
+    	// variable for newStage()
+    	int mainChara = this.mainChara;
+ 
         
         for (int i=0; i<numOfImage; i++) {
             mapImages[i] = new Image(mapImageFiles[i]);
         }
         
         maps = new int[MAP_HEIGHT][MAP_WIDTH];
-        
+        newStage();
+
+    }
+    
+    public static void newStage() {  	              
         readMap();       
         setObject(mainChara);        
-        setObject(TYPE_COIN);
-        setObject(TYPE_GOAL);
-        setObject(TYPE_ENEMY_SLIME);
+        setObject(TYPE_ITEM_COIN);
+        setObject(TYPE_TILE_GOAL);
+        setObject(TYPE_ITEM_CHEST);
+        setObject(TYPE_ENEMY_SLIME_HP3);
+        setObject(TYPE_ENEMY_FLY_HP3);
         setImageViews();
+    	
     }
     
     public static MapData getInstance() {
@@ -152,14 +184,14 @@ public class MapData { // Singleton class
     	printCharaLocation();
     }
 
-    public int getMap(int x, int y) {
+    public static int getMap(int x, int y) {
         if (x < 0 || MAP_WIDTH <= x || y < 0 || MAP_HEIGHT <= y) {
             return -1;
         }
         return maps[y][x];
     }
 
-    public void setMap(int x, int y, int type){
+    public static void setMap(int x, int y, int type){
         if (x < 0 || MAP_WIDTH <= x || y < 0 || MAP_HEIGHT <= y) {
             return;
         }
@@ -171,7 +203,7 @@ public class MapData { // Singleton class
         return mapImageViews[y][x];
     }
 
-    public void setImageViews() {
+    public static void setImageViews() {
         for (int y=chara_y-(VIEW_HEIGHT/2), index_y=0; y<chara_y + (VIEW_HEIGHT/2) + 1; y++, index_y++) {
             for (int x=chara_x-(VIEW_WIDTH/2), index_x=0; x<chara_x + (VIEW_WIDTH/2) + 1; x++, index_x++) {
                 mapImageViews[index_y][index_x] = new ImageView(mapImages[getMap(x, y)]);
@@ -193,7 +225,7 @@ public class MapData { // Singleton class
     	return null;
     }
     
-    public void setObject(int object) {
+    public static void setObject(int object) {
     	int x, y, i = 0;
     	
     	repeat:
@@ -215,20 +247,28 @@ public class MapData { // Singleton class
 	            	printCharaLocation();
 	            	break;
 	            	
-	    		case TYPE_GOAL :
-	    			setMap(x, y, TYPE_GOAL);
+	    		case TYPE_TILE_GOAL :
+	    			setMap(x, y, TYPE_TILE_GOAL);
 	    			break; 
 	
-	    		case TYPE_COIN :
-	    	        setMap(x, y, TYPE_COIN);  	
+	    		case TYPE_ITEM_COIN :
+	    	        setMap(x, y, TYPE_ITEM_COIN);  	
+	    	        i++;
+	    	        
+	    			if(i>DIFFICULTY) break;
+	    	        continue repeat;
+	    	        
+	    		case TYPE_ITEM_CHEST :
+	    	        setMap(x, y, TYPE_ITEM_CHEST);  	
 	    	        i++;
 	    	        
 	    			if(i>DIFFICULTY) break;
 	    	        continue repeat;
 	    	        
 	    	    // TODO : add other enemies
-	    		case TYPE_ENEMY_SLIME :
-                	setMap(x, y, TYPE_ENEMY_SLIME);
+	    		case TYPE_ENEMY_SLIME_HP3 :
+	    		case TYPE_ENEMY_FLY_HP3 :    			
+                	setMap(x, y, object);
 	    	        i++;
 	    	        
 	    	        if(i>DIFFICULTY -3) break;
