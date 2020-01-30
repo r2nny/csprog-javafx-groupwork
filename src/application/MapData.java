@@ -38,17 +38,37 @@ public class MapData { // Singleton class
     public static final int TYPE_CHARA_PRIST = 18;
     
     // items
-    public static final int TYPE_ENEMY_SLIME_HP3 = 19;
-    public static final int TYPE_ENEMY_SLIME_HP2 = 20;
-    public static final int TYPE_ENEMY_SLIME_HP1 = 21;
+    public static final int TYPE_ENEMY_SLIME_HP1 = 19;
+    public static final int TYPE_ENEMY_SKULL_HP2 = 20;
+    public static final int TYPE_ENEMY_SKULL_HP1 = 21;
     public static final int TYPE_ENEMY_FLY_HP3 = 22;
     public static final int TYPE_ENEMY_FLY_HP2 = 23;
     public static final int TYPE_ENEMY_FLY_HP1 = 24;
-    public static final int TYPE_ITEM_COIN = 25;
-    public static final int TYPE_TILE_GOAL = 26;
-    public static final int TYPE_ITEM_CHEST = 27;
-    public static final int TYPE_ITEM_KEY_GOLD = 28;
-    public static final int TYPE_ITEM_KEY_SILVER = 29;
+    public static final int TYPE_ENEMY_SKELETON1_HP3 = 25;
+    public static final int TYPE_ENEMY_SKELETON1_HP2 = 26;
+    public static final int TYPE_ENEMY_SKELETON1_HP1 = 27;
+    public static final int TYPE_ENEMY_SKELETON2_HP3 = 28;
+    public static final int TYPE_ENEMY_SKELETON2_HP2 = 29;
+    public static final int TYPE_ENEMY_SKELETON2_HP1 = 30;
+    public static final int TYPE_ENEMY_VAMPIRE_HP4 = 31;
+    public static final int TYPE_ENEMY_VAMPIRE_HP3 = 32;
+    public static final int TYPE_ENEMY_VAMPIRE_HP2 = 33;
+    public static final int TYPE_ENEMY_VAMPIRE_HP1 = 34;
+    public static final int TYPE_ENEMY_KRAKEN_HP7 = 35;
+    public static final int TYPE_ENEMY_KRAKEN_HP6 = 36;
+    public static final int TYPE_ENEMY_KRAKEN_HP5 = 37;
+    public static final int TYPE_ENEMY_KRAKEN_HP4 = 38;
+    public static final int TYPE_ENEMY_KRAKEN_HP3 = 39;
+    public static final int TYPE_ENEMY_KRAKEN_HP2 = 40;
+    public static final int TYPE_ENEMY_KRAKEN_HP1 = 41;
+    public static final int TYPE_ITEM_COIN = 42;
+    public static final int TYPE_TILE_GOAL = 43;
+    public static final int TYPE_ITEM_CHEST = 44;
+    public static final int TYPE_ITEM_KEY_GOLD = 45;
+    public static final int TYPE_ITEM_KEY_SILVER = 46;
+    public static final int TYPE_ITEM_POTION = 47;
+    public static final int TYPE_ITEM_ELIXIR = 48;
+    public static final int TYPE_ITEM_FORBIDDEN_BOOK = 49;
 
     
     private static final String mapImageFiles[] = {
@@ -76,17 +96,37 @@ public class MapData { // Singleton class
         "file:src/application/png/chara/prist.gif",
         
         // items and enemies 19~
-        "file:src/application/png/enemies/slime_hp3.gif",
-        "file:src/application/png/enemies/slime_hp2.gif",
         "file:src/application/png/enemies/slime_hp1.gif",
+        "file:src/application/png/enemies/skull_hp2.gif",
+        "file:src/application/png/enemies/skull_hp1.gif",
         "file:src/application/png/enemies/fly_hp3.gif",
         "file:src/application/png/enemies/fly_hp2.gif",
         "file:src/application/png/enemies/fly_hp1.gif",
+        "file:src/application/png/enemies/skeleton1_hp3.gif",
+        "file:src/application/png/enemies/skeleton1_hp2.gif",
+        "file:src/application/png/enemies/skeleton1_hp1.gif",
+        "file:src/application/png/enemies/skeleton2_hp3.gif",
+        "file:src/application/png/enemies/skeleton2_hp2.gif",
+        "file:src/application/png/enemies/skeleton2_hp1.gif",
+        "file:src/application/png/enemies/vampire_hp4.gif",
+        "file:src/application/png/enemies/vampire_hp3.gif",
+        "file:src/application/png/enemies/vampire_hp2.gif",
+        "file:src/application/png/enemies/vampire_hp1.gif",
+        "file:src/application/png/enemies/kraken_hp7.gif",
+        "file:src/application/png/enemies/kraken_hp6.gif",
+        "file:src/application/png/enemies/kraken_hp5.gif",
+        "file:src/application/png/enemies/kraken_hp4.gif",
+        "file:src/application/png/enemies/kraken_hp3.gif",
+        "file:src/application/png/enemies/kraken_hp2.gif",
+        "file:src/application/png/enemies/kraken_hp1.gif",
         "file:src/application/png/items/COIN.gif",
         "file:src/application/png/tiles/GOAL.png",
         "file:src/application/png/items/mini_chest.gif",
         "file:src/application/png/items/key_gold.gif",
-        "file:src/application/png/items/key_silver.gif"
+        "file:src/application/png/items/key_silver.gif",
+        "file:src/application/png/items/potion.gif",
+        "file:src/application/png/items/elixir.gif",
+        "file:src/application/png/items/forbidden_book.gif",
     };
     
     private static int DIFFICULTY = 3;
@@ -131,12 +171,27 @@ public class MapData { // Singleton class
     
     public static void newStage() {  	              
         readMap();       
-        setObject(mainChara);        
+        setObject(mainChara);
+        
         setObject(TYPE_ITEM_COIN);
         setObject(TYPE_TILE_GOAL);
         setObject(TYPE_ITEM_CHEST);
-        setObject(TYPE_ENEMY_SLIME_HP3);
-        setObject(TYPE_ENEMY_FLY_HP3);
+        
+        switch(gameData.getStage()) {
+        	case 8: case 7:
+	        	setObject(TYPE_ENEMY_VAMPIRE_HP4);
+        	case 6:
+	        	setObject(TYPE_ENEMY_SKELETON2_HP3);
+        	case 5: case 4:
+ 	        	setObject(TYPE_ENEMY_SKELETON1_HP3);
+        	case 3:
+	        	setObject(TYPE_ENEMY_FLY_HP3);
+        	case 2:
+	        	setObject(TYPE_ENEMY_SKULL_HP2);
+	        case 1:
+	        	setObject(TYPE_ENEMY_SLIME_HP1);
+        }
+
         setImageViews();
     	
     }
@@ -266,8 +321,12 @@ public class MapData { // Singleton class
 	    	        continue repeat;
 	    	        
 	    	    // TODO : add other enemies
-	    		case TYPE_ENEMY_SLIME_HP3 :
-	    		case TYPE_ENEMY_FLY_HP3 :    			
+	    		case TYPE_ENEMY_SLIME_HP1 :
+	    		case TYPE_ENEMY_SKULL_HP2 :
+	    		case TYPE_ENEMY_FLY_HP3 :    
+	    		case TYPE_ENEMY_SKELETON1_HP3 :
+	    		case TYPE_ENEMY_SKELETON2_HP3 :
+	    		case TYPE_ENEMY_VAMPIRE_HP4 :
                 	setMap(x, y, object);
 	    	        i++;
 	    	        
@@ -277,6 +336,30 @@ public class MapData { // Singleton class
 	    	
 	    	break; // for while(true)
     	}
+    }
+    
+    public void moveEnemy() {
+    	/*
+    	for (int y=chara_y-(VIEW_HEIGHT/2); y<chara_y + (VIEW_HEIGHT/2) + 1; y++) {
+            for (int x=chara_x-(VIEW_WIDTH/2); x<chara_x + (VIEW_WIDTH/2) + 1; x++) {
+            	int type = getMap(x, y);
+            	
+            	if (TYPE_ENEMY_SLIME_HP1 <= type && type <= TYPE_ENEMY_KRAKEN_HP1)  {
+            		int dx = 0;
+            		int dy = 0;
+            		
+            		do {
+            		dx = (int)(Math.random() * 2);
+            		dy = (int)(Math.random() * 2);
+            		} while (getMap(x + dx, y + dy) == TYPE_AISLE_WALKABLE_TILE || getMap(x + dx, y + dy) == TYPE_WALKABLE_TILE);
+            		
+            		setMap(x+dx, y+dy, type);
+            		setMap(x, y, TYPE_WALKABLE_TILE);
+            		  		
+            	}
+            }
+            }
+        */
     }
     
 	public int getMainChara() {

@@ -49,6 +49,7 @@ public class MapGameController implements Initializable {
     private final static int VIEW_WIDTH  = 13;
     private final static int VIEW_HEIGHT = 9;
     private static int chara_x, chara_y;
+    public static String noticeText = "";
     
     // playable character
     public static final int TYPE_CHARA_PRIST = 18;
@@ -180,14 +181,8 @@ public class MapGameController implements Initializable {
     	
     	chara_x =  m.getChara_x();
     	chara_y =  m.getChara_y();
-        
-        if (mapData.getMap(chara_x + dx, chara_y + dy) == MapData.TYPE_TILE_GOAL){
-            if(g.getCoin() >=  g.getDifficulty()){                          
-                noticeLabel.setText("Stage " + g.getStage());	               
-            } else {
-                noticeLabel.setText("You don't have enough coin.");	            
-            }
-        }
+    	
+    	noticeLabel.setText(noticeText);
         
         showHeart();
         setMetadataText(gameData);
@@ -215,12 +210,11 @@ public class MapGameController implements Initializable {
     
     public void setMetadataText(GameData g) {
     	metadataLabel.setText(adminText +
-		   			 "NAME : " + g.getName() + "\n" + 
-		   			 "DIFFICULTY : " + g.getDifficulty() + "\n" +
-		   			 "STAGE : " + g.getStage() + "\n" +
-		   			 "COIN : " + g.getCoin() + "\n" +
-    				 "COIN : " + chara.getHp());
-    	
+		   			 "NAME : " + g.getName() + "  ||  " + 
+		   			 "STAGE : " + g.getStage() + "  ||  " +
+		   			 "COIN : " + g.getCoin() + "  ||  " +
+		   			 "Gold Key : " + g.getKey_gold() + "  ||  " +
+		   			 "Silver Key : " + g.getKey_silver());   	
     }
 
 	public void getCharaLocation() {

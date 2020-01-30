@@ -12,15 +12,15 @@
   
   <children>
       <HBox fx:id="top_bar" />
-    <HBox fx:id="menu_bar" alignment="TOP_CENTER" prefHeight="25.0">
+    <HBox fx:id="menu_bar" alignment="TOP_CENTER">
       <children>
-	<Button onAction="#func1ButtonAction" prefWidth="100" text="FUNC1" />
-	<Button onAction="#func2ButtonAction" prefWidth="100" text="FUNC2" />
-	<Button onAction="#func3ButtonAction" prefWidth="100" text="FUNC3" />
-	<Button onAction="#func4ButtonAction" prefWidth="100" text="FUNC4" />
+	<Button fx:id="f1" onAction="#func1ButtonAction" prefWidth="36.0" text="F1" />
+	<Button fx:id="f2" onAction="#func2ButtonAction" prefWidth="36.0" text="F2" />
+	<Button fx:id="f3" onAction="#func3ButtonAction" prefWidth="36.0" text="F3" />
+	<Button fx:id="f4" onAction="#func4ButtonAction" prefWidth="36.0" text="F4" />
       </children>
     </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER">
          <children>
             <VBox>
                <children>
@@ -29,13 +29,10 @@
                <HBox.margin>
                   <Insets />
                </HBox.margin>
-               <padding>
-                  <Insets top="10.0" />
-               </padding>
             </VBox>
          </children>
          <VBox.margin>
-            <Insets bottom="15.0" top="15.0" />
+            <Insets />
          </VBox.margin>
       </HBox>
       <HBox alignment="TOP_CENTER">
@@ -43,7 +40,7 @@
             <Label fx:id="noticeLabel" alignment="CENTER" prefHeight="30.0" text="..." />
          </children>
       </HBox>
-      <HBox alignment="CENTER">
+      <HBox fx:id="heart_bar" alignment="CENTER">
          <children>
             <ImageView fx:id="heart1" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>

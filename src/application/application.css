@@ -2,12 +2,21 @@
 .root {
     -fx-font-size: 11px;
     -fx-font-family: sans-serif;
-	-fx-background-color: WHITE;
+	-fx-background-color: #303030;
 
 }
 
 #metadataLabel {
-	-fx-text-fill : BLACK;
+	-fx-text-fill : WHITE;
+}
+
+#noticeLabel {
+	-fx-text-fill : WHITE;
+}
+
+#f1, #f2, #f3, #f4 {
+    -fx-background-color: #303030;
+    -fx-text-fill: #303030;
 }
 
 #txtName {

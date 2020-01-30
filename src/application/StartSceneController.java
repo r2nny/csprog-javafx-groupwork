@@ -18,9 +18,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.AudioClip;
-import javafx.stage.Stage; 
+import javafx.stage.Stage;
+import javafx.stage.StageStyle; 
 
 public class StartSceneController implements Initializable {
 	@FXML private Button easyButton;
@@ -28,8 +30,10 @@ public class StartSceneController implements Initializable {
 	@FXML private Button hardButton; 
 	@FXML private Button helpButton;
 	@FXML private ImageView game_title;
+	@FXML private ImageView hard;
     @FXML private TextField txtName; 
-
+    
+    Image difficulty_hard_unlocked = new Image("file:src/application/png/start_scene/difficulty_hard_unlocked.png");	
 	AudioClip startBgm = new AudioClip(new File("./src/application/bgm/town_bgm.mp3").toURI().toString());
 	
 	static GameData gameData = GameData.getInstance();
@@ -37,6 +41,7 @@ public class StartSceneController implements Initializable {
 	final int EASY = 3;
 	final int NORMAL = 5;
 	final int HARD = 7;
+	public static boolean isHardLocked = true;
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -51,6 +56,7 @@ public class StartSceneController implements Initializable {
 		start(NORMAL);
 	}
 	public void hardButtonAction(ActionEvent event) throws Exception{
+		if(isHardLocked) return;
 		start(HARD);
 	}
 	
@@ -89,6 +95,18 @@ public class StartSceneController implements Initializable {
     }
 
     public void helpButtonAction(ActionEvent event) throws Exception{  
+    	Stage primaryStage = new Stage();
+        Parent main = FXMLLoader.load(getClass().getResource("HowToPlay.fxml"));
+        Scene scene = new Scene(main);
+               
+        primaryStage.setScene(scene);   
+        primaryStage.initStyle(StageStyle.DECORATED);
+        primaryStage.show();
+        primaryStage.setOnCloseRequest(event_help -> {
+        	if(!isHardLocked) {
+        		hard.setImage(difficulty_hard_unlocked);
+        	}
+        });
     }
 
 }
